@@ -3,13 +3,14 @@ import { useState } from "react";
 import { tempMusicData } from "./data/tempMusicData";
 import { tempPlaylist } from "./data/tempPlaylist";
 
-function Navbar({ musics, query, setQuery }) {
+function Navbar({ children, musics, query, setQuery }) {
   //structural component
   return (
     <nav className="container">
       <Logo />
       <Search query={query} setQuery={setQuery} />
-      <NumberResult musics={musics} />
+      {/* <NumberResult musics={musics} /> */}
+      {children}
     </nav>
   );
 }
@@ -53,8 +54,8 @@ function Music({ musics }) {
   );
 }
 
-function Box({ content, musics, playlist }) {
-  return <div className="container">{content}</div>;
+function Box({ children, musics, playlist }) {
+  return <div className="container">{children}</div>;
 }
 
 function Playlist({ playlist }) {
@@ -74,10 +75,11 @@ function Playlist({ playlist }) {
   );
 }
 
-function Main({ musics, playlist, setPlaylist, addToPlaylist }) {
+function Main({ children, musics, playlist, setPlaylist, addToPlaylist }) {
   return (
     <div className="container">
-      <Box
+      {children}
+      {/* <Box
         content={<Music musics={musics} />}
         musics={musics}
         playlist={playlist}
@@ -86,7 +88,7 @@ function Main({ musics, playlist, setPlaylist, addToPlaylist }) {
         content={<Playlist playlist={playlist} />}
         musics={musics}
         playlist={playlist}
-      />
+      /> */}
     </div>
   );
 }
@@ -101,15 +103,31 @@ function App() {
 
   return (
     <>
-      <Navbar musics={musics} query={query} setQuery={setQuery} />
-
+      <Navbar musics={musics} query={query} setQuery={setQuery}>
+        <NumberResult musics={musics} />
+      </Navbar>
       <Main
         musics={musics}
         setMusic={setMusic}
         playlist={playlist}
         setPlaylist={setPlaylist}
         addToPlaylist={addToPlaylist}
-      />
+      >
+        <Box
+          // content={<Music musics={musics} />}
+          musics={musics}
+          playlist={playlist}
+        >
+          <Music musics={musics} />\
+        </Box>
+        <Box
+          // content={<Playlist playlist={playlist} />}
+          musics={musics}
+          playlist={playlist}
+        >
+          <Playlist playlist={playlist} />
+        </Box>
+      </Main>
     </>
   );
 }
