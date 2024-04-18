@@ -1,20 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap");
 body {
-  font-family: Arial, sans-serif;
   background-color: #f8f8f8;
   margin: 0;
   padding: 0;
 }
 
+h1 {
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+}
+
+h2 {
+  color: rgb(218, 60, 86);
+  font-family: "Poppins", sans-serif;
+
+  font-weight: 600;
+}
+
+strong {
+  color: rgb(218, 60, 86);
+}
 .container {
   display: flex;
+  gap: 50px;
   justify-content: space-around;
-  margin-top: 30px;
+  margin: 30px;
 }
 
 .container > div {
   flex: 1;
   padding: 20px;
-  background-color: #fff;
+  background-color: rgb(246, 233, 235);
+  border-radius: 50px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -26,19 +43,27 @@ ul {
 li {
   padding: 10px 0;
   border-bottom: 1px solid #ccc;
+  font-family: "Poppins", sans-serif;
 }
 
+input {
+  width: 300px;
+  font-family: "Poppins", sans-serif;
+}
+.addToPlaylist {
+  text-align: end;
+}
 button {
   padding: 10px 20px;
   font-size: 16px;
   border: none;
-  background-color: #007bff;
+  background-color: rgb(227, 124, 141);
   color: #fff;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: rgb(218, 60, 86);
 }
 
 @media (max-width: 768px) {
