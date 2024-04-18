@@ -97,7 +97,7 @@ function Playlist({
               </div>
               <div className="col-4">
                 <button onClick={() => handleRemoveFromPlaylist(music)}>
-                  Delete
+                  <i class="bi bi-x-octagon-fill"></i>
                 </button>
               </div>
             </div>
@@ -115,11 +115,18 @@ function Main({ children, musics, playlist, setPlaylist, addToPlaylist }) {
 
 function Footer({ playlist }) {
   let songCount = playlist.length;
+  let fiveStarCount = playlist.filter((song) => song.rating === 5).length;
+
   return (
     <div>
-      <p>
-        You have <strong>{songCount}</strong> songs in your playlist
-      </p>
+      <ul>
+        <li>
+          You have <strong>{songCount}</strong> songs in your playlist
+        </li>
+        <li>
+          You added <strong>{fiveStarCount}</strong> songs that are rated 5⭐
+        </li>
+      </ul>
     </div>
   );
 }
@@ -129,7 +136,7 @@ function Search({ query, setQuery, search }) {
     <input
       className="search"
       type="text"
-      placeholder="Search music..."
+      placeholder="Search song or artist..."
       value={query}
       onChange={(e) => {
         setQuery(e.target.value);
@@ -170,14 +177,14 @@ function App() {
 
   const filteredMusic = musics.filter(
     (music) =>
-      music.title.toLowerCase().includes(query.toLowerCase()) ||
-      music.artist.toLowerCase().includes(query.toLowerCase())
+      music.title.toLowerCase().startsWith(query.toLowerCase()) ||
+      music.artist.toLowerCase().startsWith(query.toLowerCase())
   );
 
   const filteredPlaylist = playlist.filter(
     (music) =>
-      music.title.toLowerCase().includes(query.toLowerCase()) ||
-      music.artist.toLowerCase().includes(query.toLowerCase())
+      music.title.toLowerCase().startsWith(query.toLowerCase()) ||
+      music.artist.toLowerCase().startsWith(query.toLowerCase())
   );
   return (
     <>
@@ -196,7 +203,7 @@ function App() {
         </Box>
         <Box musics={musics} playlist={playlist}>
           <Playlist
-            playlist={playlist}
+            playlist={filteredPlaylist}
             removeFromPlaylist={removeFromPlaylist}
             sortAlphaDown={sortAlphaDown}
             sortAlphaUp={sortAlphaUp}
