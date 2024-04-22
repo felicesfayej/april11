@@ -1,22 +1,16 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./../node_modules/bootstrap-icons/font/bootstrap-icons.min.css";
-// import { tempMusicData } from "./data/tempMusicData";
-// import { tempPlaylist } from "./data/tempPlaylist";
+import { tempMusicData } from "./data/tempMusicData";
+import { tempPlaylist } from "./data/tempPlaylist";
 
-function Navbar({ children, musics, setMusic, query, setQuery, search }) {
+function Navbar({ children, musics, query, setQuery, search }) {
   //structural component
   return (
     <nav className="container">
       <Logo />
-      <Search
-        query={query}
-        setQuery={setQuery}
-        search={search}
-        musics={musics}
-        setMusic={setMusic}
-      />
+      <Search query={query} setQuery={setQuery} search={search} />
       {children}
     </nav>
   );
@@ -50,17 +44,13 @@ function Music({ musics, addToPlaylist }) {
             <div className="col-4">
               {" "}
               {music.title} by {music.artist} ({music.genre})
-              <p>
-                <span>⭐</span>
-                <span>{music.rating}</span>
-              </p>
             </div>
             <div className="col-4">
               <button
                 className="addToPlaylist"
                 onClick={() => handleAddToPlaylist(music)}
               >
-                <i className="bi bi-heart-fill"></i>
+                <i class="bi bi-heart-fill"></i>
               </button>
             </div>
           </div>
@@ -89,10 +79,10 @@ function Playlist({
     <div>
       <h2>My playlist 🪐</h2>
       <button onClick={sortAlphaUp}>
-        <i className="bi bi-sort-alpha-up"></i>
+        <i class="bi bi-sort-alpha-up"></i>
       </button>
       <button onClick={sortAlphaDown}>
-        <i className="bi bi-sort-alpha-down"></i>
+        <i class="bi bi-sort-alpha-down"></i>
       </button>
       <ul>
         {playlist.map((music) => (
@@ -107,7 +97,7 @@ function Playlist({
               </div>
               <div className="col-4">
                 <button onClick={() => handleRemoveFromPlaylist(music)}>
-                  <i className="bi bi-x-octagon-fill"></i>
+                  <i class="bi bi-x-octagon-fill"></i>
                 </button>
               </div>
             </div>
@@ -141,68 +131,12 @@ function Footer({ playlist }) {
   );
 }
 
-function Search({ query, setQuery, search, musics, setMusic }) {
-  const [accessToken, setAccessToken] = useState("");
-
-  useEffect(() => {
-    var authParameters = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body:
-        "grant_type=client_credentials&client_id=" +
-        CLIENT_ID +
-        "&client_secret=" +
-        CLIENT_SECRET,
-    };
-
-    fetch("https://accounts.spotify.com/api/token", authParameters)
-      .then((result) => result.json())
-      .then((data) => setAccessToken(data.access_token));
-  }, []);
-
-  async function srch() {
-    console.log("searching for " + query);
-
-    var trackParameters = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    };
-
-    var tracks = await fetch(
-      "https://api.spotify.com/v1/search?q=" + query + "&type=track&limit=50",
-      trackParameters
-    ).then((res) =>
-      res.json().then((data) =>
-        setMusic(
-          data.tracks.items.map((track) => {
-            return {
-              id: track.id,
-              title: track.name,
-              artist: track.artists[0].name,
-              rating: Math.round((track.popularity / 100) * 5),
-            };
-          })
-        )
-      )
-    );
-  }
-  console.log(accessToken);
-
+function Search({ query, setQuery, search }) {
   return (
     <input
       className="search"
       type="text"
       placeholder="Search song or artist..."
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          srch();
-        }
-      }}
       value={query}
       onChange={(e) => {
         setQuery(e.target.value);
@@ -212,12 +146,10 @@ function Search({ query, setQuery, search, musics, setMusic }) {
   );
 }
 
-const CLIENT_ID = "eb50e0a430b247bba51b0ef994d06e1b";
-const CLIENT_SECRET = "35360305ec334ac2ae496c3ce4849c3c";
 function App() {
   const [query, setQuery] = useState("");
-  const [musics, setMusic] = useState([]); //tempMusicList
-  const [playlist, setPlaylist] = useState([]); //tempPlaylist
+  const [musics, setMusic] = useState(tempMusicData);
+  const [playlist, setPlaylist] = useState(tempPlaylist);
   const addToPlaylist = (music) => {
     setPlaylist([...playlist, music]);
   };
@@ -256,13 +188,7 @@ function App() {
   );
   return (
     <>
-      <Navbar
-        musics={musics}
-        setMusic={setMusic}
-        query={query}
-        setQuery={setQuery}
-        search={search}
-      >
+      <Navbar musics={musics} query={query} setQuery={setQuery} search={search}>
         <NumberResult musics={musics} />
       </Navbar>
       <Main
@@ -291,22 +217,3 @@ function App() {
 }
 
 export default App;
-
-// function App() {
-//   // fetch("https://jsonplaceholder.typicode.com/todos").then((result) =>
-//   //   result.json().then((data) => console.log(data))
-//   // );
-
-//   async function getTodos() {
-//     const result = await fetch("https://jsonplaceholder.typicode.com/todos");
-//     const data = await result.json();
-//     console.log(data);
-//   }
-
-//   getTodos();
-//   console.log("Gab");
-
-//   return <div></div>;
-// }
-
-// export default App;
